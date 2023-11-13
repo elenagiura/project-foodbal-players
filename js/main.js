@@ -158,6 +158,7 @@ function squadsDom(arr) {
 /*Header*/
 var logo = document.querySelector('header div img');
 logo.setAttribute('src', teamData.teamLogoPath);
+logo.setAttribute('alt', 'Manchester United logo');
 
 /*Main*/
 squadsDom(firstSquad);
