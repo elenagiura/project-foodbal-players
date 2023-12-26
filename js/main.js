@@ -7,11 +7,15 @@ function Player(name, lastName, number, position, age, imgPath) {
   this.imgPath = imgPath;
 }
 
+function createPlayer(name, lastName, number, position, age, imgPath) {
+  return new Player(name, lastName, number, position, age, imgPath);
+}
+
 var teamData = {
   teamName: 'MANCHESTER UNITED',
   teamLogoPath: './images/logo.png',
   players: [
-    new Player(
+    createPlayer(
       'David',
       'De Gea',
       1,
@@ -19,7 +23,7 @@ var teamData = {
       30,
       './images/david-de-dea.png'
     ),
-    new Player(
+    createPlayer(
       'Victor',
       'Lindelof',
       2,
@@ -27,8 +31,15 @@ var teamData = {
       26,
       './images/victor-lindelof.png'
     ),
-    new Player('Paul', 'Pogba', 6, 'Midfielder', 27, './images/paul-pogba.png'),
-    new Player(
+    createPlayer(
+      'Paul',
+      'Pogba',
+      6,
+      'Midfielder',
+      27,
+      './images/paul-pogba.png'
+    ),
+    createPlayer(
       'Edinson',
       'Cavani',
       7,
@@ -36,8 +47,15 @@ var teamData = {
       34,
       './images/edinson-cavani.png'
     ),
-    new Player('Eric', 'Bailly', 3, 'Defender', 26, './images/eric-bailly.png'),
-    new Player(
+    createPlayer(
+      'Eric',
+      'Bailly',
+      3,
+      'Defender',
+      26,
+      './images/eric-bailly.png'
+    ),
+    createPlayer(
       'Diogo',
       'Dalot',
       20,
@@ -45,7 +63,7 @@ var teamData = {
       21,
       './images/diogo-dalot.png'
     ),
-    new Player(
+    createPlayer(
       'Facundo',
       'Pellistri',
       28,
@@ -53,7 +71,7 @@ var teamData = {
       19,
       './images/facundo-pellistri.png'
     ),
-    new Player(
+    createPlayer(
       'Jesse',
       'Lingard',
       14,
@@ -61,7 +79,7 @@ var teamData = {
       28,
       './images/jesse-lingard.png'
     ),
-    new Player(
+    createPlayer(
       'Teden',
       'Mengi',
       43,
@@ -69,7 +87,7 @@ var teamData = {
       18,
       './images/teden-mengi.png'
     ),
-    new Player(
+    createPlayer(
       'Anthony',
       'Martil',
       9,
@@ -77,7 +95,7 @@ var teamData = {
       25,
       './images/anthony-martial.png'
     ),
-    new Player(
+    createPlayer(
       'Mason',
       'Greenwood',
       11,
@@ -85,8 +103,8 @@ var teamData = {
       19,
       './images/mason-greenwood.png'
     ),
-    new Player('Luke', 'Shaw', 23, 'Defender', 25, './images/luke-shaw.png'),
-    new Player(
+    createPlayer('Luke', 'Shaw', 23, 'Defender', 25, './images/luke-shaw.png'),
+    createPlayer(
       'Alex',
       'Telles',
       27,
@@ -94,7 +112,7 @@ var teamData = {
       28,
       './images/alex-telles.png'
     ),
-    new Player(
+    createPlayer(
       'Daniel',
       'James',
       21,
@@ -102,7 +120,7 @@ var teamData = {
       23,
       './images/daniel-james.png'
     ),
-    new Player(
+    createPlayer(
       'Nemanja',
       'Matic',
       31,
@@ -113,8 +131,8 @@ var teamData = {
   ],
 };
 
-/*Random number from 0 to 10*/
-function randomNumb(arr) {
+/* Random index from passed array */
+function randomIndex(arr) {
   return Math.round(Math.random() * (arr.length - 1));
 }
 
@@ -128,28 +146,14 @@ function squadsDom(arr) {
   section.setAttribute('class', 'clearfix');
   for (var i = 0; i < arr.length; i++) {
     var player = document.createElement('article');
-    player.innerHTML =
-      "<img src='" +
-      arr[i].imgPath +
-      "' alt='" +
-      arr[i].name +
-      ' ' +
-      arr[i].lastName +
-      "'/>" +
-      '<span>' +
-      arr[i].number +
-      '</span>' +
-      '<div><p>Full name: <span>' +
-      arr[i].name +
-      ' ' +
-      arr[i].lastName +
-      '</span></p>' +
-      '<p>Position: <span>' +
-      arr[i].position +
-      '</span></p>' +
-      '<p>Age: <span>' +
-      arr[i].age +
-      '</span></p></div>';
+    player.innerHTML = `
+    <img src='${arr[i].imgPath}' alt='${arr[i].name} ${arr[i].lastName}'/>
+    <span>${arr[i].number}</span>
+    <article>
+      <p>Full name: <span>${arr[i].name} ${arr[i].lastName}</span></p>
+      <p>Position: <span>${arr[i].position}</span></p>
+      <p>Age: <span>${arr[i].age}</span></p>
+    </article>`;
     section.appendChild(player);
   }
   document.querySelector('main div.wrapper').appendChild(section);
@@ -159,6 +163,7 @@ function squadsDom(arr) {
 var logo = document.querySelector('header div img');
 logo.setAttribute('src', teamData.teamLogoPath);
 logo.setAttribute('alt', 'Manchester United logo');
+logo.textContent = 'Manchester United'; // Fallback text if the image fails to load
 
 /*Main*/
 squadsDom(firstSquad);
@@ -166,31 +171,32 @@ squadsDom(substitution);
 
 /*Changes*/
 function chooseSubs() {
-  var number = randomNumb(firstSquad);
-  var playerForChange = document.querySelectorAll('main section article')[
-    number
+  var index = randomIndex(firstSquad);
+  var playerForChange = document.querySelectorAll('main section>article')[
+    index
   ];
-  var subs = document.querySelector('main section:nth-child(3) article');
-  makeSubs(number, playerForChange, subs);
+  var subs = document.querySelector('main section:nth-child(3)>article');
+  makeSubs(index, playerForChange, subs);
 }
 
-function makeSubs(number, playerForChange, subs) {
-  if (number === 10) {
-    playerForChange.previousElementSibling.after(subs);
-  } else {
-    playerForChange.nextElementSibling.before(subs);
-  }
+function makeSubs(index, playerForChange, subs) {
+  var insertionPoint =
+    index === 10
+      ? playerForChange.previousElementSibling
+      : playerForChange.nextElementSibling;
+  insertionPoint.after(subs);
   document
     .querySelector('main section:nth-child(3)')
     .appendChild(playerForChange);
-  document.querySelector('main aside div p').textContent =
-    subs.querySelector('span').textContent +
-    ' ' +
-    subs.querySelector('p span').textContent;
+  var subsText = `${subs.querySelector('span').textContent} ${
+    subs.querySelector('p span').textContent
+  }`;
+  var playerText = `${playerForChange.querySelector('span').textContent} ${
+    playerForChange.querySelector('p span').textContent
+  }`;
+  document.querySelector('main aside div p').textContent = subsText;
   document.querySelector('main aside div p:last-child').textContent =
-    playerForChange.querySelector('span').textContent +
-    ' ' +
-    playerForChange.querySelector('p span').textContent;
+    playerText;
 }
 
 function timer() {
