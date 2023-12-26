@@ -200,24 +200,24 @@ function makeSubs(index, playerForChange, subs) {
 }
 
 function timer() {
-  var timer = parseInt(
-    document.querySelector('header section div p').textContent
-  );
-  document.querySelector('header section div p').textContent = timer - 1;
-  if (timer === 30) {
-    document.querySelector('header section div div').classList.add('anim');
+  var timerElement = document.querySelector('header section div p');
+  var countdown = parseInt(timerElement.textContent);
+  timerElement.textContent = countdown - 1;
+  var countdownDiv = document.querySelector('header section div div');
+  if (countdown === 30) {
+    countdownDiv.classList.add('anim');
   }
-  if (timer <= 11) {
-    document.querySelector('header section div div').classList.add('red');
+  if (countdown <= 11) {
+    countdownDiv.classList.add('red');
   }
-  if (timer === 0) {
+  if (countdown === 0) {
     chooseSubs();
-    document.querySelector('header section div p').textContent = 30;
-    document.querySelector('header section div div').classList.remove('red');
-    document.querySelector('header section div div').classList.remove('anim');
+    // Reset countdown to 30 seconds
+    timerElement.textContent = 30;
+    // Reset styles
+    countdownDiv.classList.remove('red', 'anim');
   }
 }
-
 setInterval(timer, 1000);
 
 document
@@ -225,10 +225,11 @@ document
   .addEventListener('click', function () {
     document.querySelector('main aside article').classList.toggle('show');
   });
-
 document
   .querySelector('main aside>button:last-child')
   .addEventListener('click', function () {
-    document.querySelector('header section div div').classList.remove('anim');
+    var countdownDiv = document.querySelector('header section div div');
+    // Reset styles and countdown to 0
+    countdownDiv.classList.remove('anim', 'red');
     document.querySelector('header section div p').textContent = 0;
   });
