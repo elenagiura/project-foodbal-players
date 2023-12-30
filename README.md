@@ -13,14 +13,10 @@ To run this project, follow these steps:
 
 Copy the repository URL.
 Open GitBash and navigate to your desired location using:
-bash
-Copy code
 ```
 $ cd <location>
 ```
 Clone the repository with the following command:
-bash
-Copy code
 ```
 $ git clone <url>
 ```
